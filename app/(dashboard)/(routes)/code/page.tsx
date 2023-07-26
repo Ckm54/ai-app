@@ -17,7 +17,13 @@ import { Loader } from "@/components/Loader";
 import { BotAvatar } from "@/components/shared/BotAvatar";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ChatCompletionRequestMessage } from "openai";
@@ -90,6 +96,7 @@ const CodeGenPage = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
