@@ -4,7 +4,10 @@ import React from "react";
 
 const CrispChat = () => {
   React.useEffect(() => {
-    Crisp.configure("4d1b01c5-cd65-4079-b618-96620a03a8f4");
+    if (!process.env.NEXT_PUBLIC_CRISP_APP_ID) {
+      return;
+    }
+    Crisp.configure(process.env.NEXT_PUBLIC_CRISP_APP_ID);
   }, []);
   return null;
 };
