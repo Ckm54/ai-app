@@ -23,10 +23,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { formSchema } from "./constants";
+import { useProModal } from "@/hooks/useProModal";
 
 const VideoGenPage = () => {
   const router = useRouter();
   const [video, setVideo] = React.useState<string>();
+  const openProModal = useProModal((state) => state.onOpen);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,9 +48,11 @@ const VideoGenPage = () => {
       setVideo(response.data[0]);
 
       form.reset();
-    } catch (error) {
-      // todo: open pro subscription modal
-      console.log(error);
+    } catch (error: any) {
+      ///// todo: open pro subscription modal
+      if (error?.response?.status === 403) {
+        openProModal();
+      }
     } finally {
       router.refresh();
     }

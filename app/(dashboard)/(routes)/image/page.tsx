@@ -32,9 +32,12 @@ import {
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
+import { useProModal } from "@/hooks/useProModal";
 
 const ImageGenPage = () => {
   const router = useRouter();
+  const openProModal = useProModal((state) => state.onOpen);
+
   const [images, setImages] = React.useState([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,9 +62,11 @@ const ImageGenPage = () => {
       setImages(urls);
 
       form.reset();
-    } catch (error) {
-      // todo: open pro subscription modal
-      console.log(error);
+    } catch (error: any) {
+      ///// todo: open pro subscription modal
+      if (error?.response?.status === 403) {
+        openProModal();
+      }
     } finally {
       router.refresh();
     }

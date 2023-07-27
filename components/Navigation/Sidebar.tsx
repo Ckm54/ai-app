@@ -14,6 +14,11 @@ import {
   Settings,
   VideoIcon,
 } from "lucide-react";
+import FreeTierCounter from "@/components/shared/FreeTierCounter";
+
+interface SidebarProps {
+  apiLimitCount: number;
+}
 
 const montserrat = Montserrat({
   weight: "600",
@@ -65,7 +70,7 @@ const routes = [
   },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -100,6 +105,9 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
+
+      {/* free tier counter */}
+      <FreeTierCounter apiLimitCount={apiLimitCount} />
     </div>
   );
 };

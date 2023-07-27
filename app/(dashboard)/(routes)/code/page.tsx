@@ -28,9 +28,12 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ChatCompletionRequestMessage } from "openai";
 import { formSchema } from "./constants";
+import { useProModal } from "@/hooks/useProModal";
 
 const CodeGenPage = () => {
   const router = useRouter();
+  const openProModal = useProModal((state) => state.onOpen);
+
   const [messages, setMessages] = React.useState<
     ChatCompletionRequestMessage[]
   >([]);
@@ -59,9 +62,11 @@ const CodeGenPage = () => {
       setMessages((current) => [...current, userMessage, response.data]);
 
       form.reset();
-    } catch (error) {
-      // todo: open pro subscription modal
-      console.log(error);
+    } catch (error: any) {
+      ///// todo: open pro subscription modal
+      if (error?.response?.status === 403) {
+        openProModal();
+      }
     } finally {
       router.refresh();
     }

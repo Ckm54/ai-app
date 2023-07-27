@@ -27,9 +27,12 @@ import { Loader } from "@/components/Loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { BotAvatar } from "@/components/shared/BotAvatar";
+import { useProModal } from "@/hooks/useProModal";
 
 const ConversationPage = () => {
   const router = useRouter();
+  const openProModal = useProModal((state) => state.onOpen);
+
   const [messages, setMessages] = React.useState<
     ChatCompletionRequestMessage[]
   >([]);
@@ -58,9 +61,11 @@ const ConversationPage = () => {
       setMessages((current) => [...current, userMessage, response.data]);
 
       form.reset();
-    } catch (error) {
-      // todo: open pro subscription modal
-      console.log(error);
+    } catch (error: any) {
+      ///// todo: open pro subscription modal
+      if (error?.response?.status === 403) {
+        openProModal();
+      }
     } finally {
       router.refresh();
     }
