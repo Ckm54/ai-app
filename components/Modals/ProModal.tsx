@@ -1,5 +1,8 @@
 "use client";
-import React from "react";
+import { tools } from "@/app/(dashboard)/(routes)/dashboard/page";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -9,15 +12,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useProModal } from "@/hooks/useProModal";
-import { Badge } from "@/components/ui/badge";
-import { tools } from "@/app/(dashboard)/(routes)/dashboard/page";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Check, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Check, Zap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 const ProModal = () => {
+  const router = useRouter();
   const proModal = useProModal();
   const [loading, setLoading] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
@@ -39,6 +41,7 @@ const ProModal = () => {
     } catch (error) {
       console.log("STRIPE_CLIENT_ERROR", error);
     } finally {
+      router.refresh();
       setLoading(false);
     }
   };
@@ -77,6 +80,7 @@ const ProModal = () => {
             variant={"premium"}
             className="w-full"
             onClick={onSubscribe}
+            disabled={loading}
           >
             Upgrade <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>

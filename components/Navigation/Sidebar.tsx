@@ -15,9 +15,13 @@ import {
   VideoIcon,
 } from "lucide-react";
 import FreeTierCounter from "@/components/shared/FreeTierCounter";
+import { User } from "@clerk/nextjs/dist/types/server";
+import { checkSubscription } from "@/lib/subscription";
 
 interface SidebarProps {
   apiLimitCount: number;
+  userName: string;
+  isPro: boolean;
 }
 
 const montserrat = Montserrat({
@@ -70,7 +74,7 @@ const routes = [
   },
 ];
 
-const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
+const Sidebar = ({ apiLimitCount = 0, userName, isPro }: SidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -107,7 +111,11 @@ const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
       </div>
 
       {/* free tier counter */}
-      <FreeTierCounter apiLimitCount={apiLimitCount} />
+      <FreeTierCounter
+        apiLimitCount={apiLimitCount}
+        userName={userName}
+        isPro={isPro}
+      />
     </div>
   );
 };
