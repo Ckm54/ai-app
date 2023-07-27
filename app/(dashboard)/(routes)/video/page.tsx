@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { formSchema } from "./constants";
 import { useProModal } from "@/hooks/useProModal";
+import { toast } from "react-hot-toast";
 
 const VideoGenPage = () => {
   const router = useRouter();
@@ -52,6 +53,8 @@ const VideoGenPage = () => {
       ///// todo: open pro subscription modal
       if (error?.response?.status === 403) {
         openProModal();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();

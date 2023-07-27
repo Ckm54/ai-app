@@ -33,6 +33,7 @@ import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { useProModal } from "@/hooks/useProModal";
+import { toast } from "react-hot-toast";
 
 const ImageGenPage = () => {
   const router = useRouter();
@@ -66,6 +67,8 @@ const ImageGenPage = () => {
       ///// todo: open pro subscription modal
       if (error?.response?.status === 403) {
         openProModal();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();

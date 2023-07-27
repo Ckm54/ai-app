@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { ChatCompletionRequestMessage } from "openai";
 import { formSchema } from "./constants";
 import { useProModal } from "@/hooks/useProModal";
+import { toast } from "react-hot-toast";
 
 const CodeGenPage = () => {
   const router = useRouter();
@@ -66,6 +67,8 @@ const CodeGenPage = () => {
       ///// todo: open pro subscription modal
       if (error?.response?.status === 403) {
         openProModal();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();
