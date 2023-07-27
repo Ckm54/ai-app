@@ -5,7 +5,7 @@ import React from "react";
 import * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Music } from "lucide-react";
+import { VideoIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
@@ -24,9 +24,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { formSchema } from "./constants";
 
-const MusicPage = () => {
+const VideoGenPage = () => {
   const router = useRouter();
-  const [music, setMusic] = React.useState<string>();
+  const [video, setVideo] = React.useState<string>();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,11 +39,11 @@ const MusicPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setMusic(undefined);
+      setVideo(undefined);
 
-      const response = await axios.post("/api/music", values);
+      const response = await axios.post("/api/video", values);
 
-      setMusic(response.data.audio);
+      setVideo(response.data[0]);
 
       form.reset();
     } catch (error) {
@@ -57,11 +57,11 @@ const MusicPage = () => {
   return (
     <div>
       <Heading
-        title="Music Generation"
-        description="Turn your prompt into music"
-        Icon={Music}
-        iconColor="text-emerald-500"
-        bgColor="bg-emerald-500/10"
+        title="Video Generation"
+        description="Turn your prompt into video"
+        Icon={VideoIcon}
+        iconColor="text-orange-700"
+        bgColor="bg-orange-700/10"
       />
 
       <div className="px-4 lg:px-8">
@@ -79,7 +79,7 @@ const MusicPage = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Hip hop solo"
+                        placeholder="Shark swiming around a coral reef"
                         {...field}
                       />
                     </FormControl>
@@ -103,15 +103,18 @@ const MusicPage = () => {
               <Loader />
             </div>
           )}
-          {!music && !isLoading && (
+          {!video && !isLoading && (
             <div>
-              <Empty label="No Music generated" />
+              <Empty label="No video generated" />
             </div>
           )}
-          {music && (
-            <audio controls className="w-full mt-8">
-              <source src={music} />
-            </audio>
+          {video && (
+            <video
+              className="w-full aspect-video mt-8 rounded-lg border bg-black"
+              controls
+            >
+              <source src={video} />
+            </video>
           )}
         </div>
       </div>
@@ -119,4 +122,4 @@ const MusicPage = () => {
   );
 };
 
-export default MusicPage;
+export default VideoGenPage;
