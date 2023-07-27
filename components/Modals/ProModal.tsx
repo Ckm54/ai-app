@@ -1,5 +1,4 @@
 "use client";
-import { tools } from "@/app/(dashboard)/(routes)/dashboard/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { tools } from "@/constants";
 import { useProModal } from "@/hooks/useProModal";
 import { cn } from "@/lib/utils";
 import axios from "axios";
