@@ -17,6 +17,7 @@ import axios from "axios";
 import { Check, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "react-hot-toast";
 
 const ProModal = () => {
   const router = useRouter();
@@ -39,7 +40,8 @@ const ProModal = () => {
 
       window.location.href = response.data.url;
     } catch (error) {
-      console.log("STRIPE_CLIENT_ERROR", error);
+      // console.log("STRIPE_CLIENT_ERROR", error);
+      toast.error("Something went wrong");
     } finally {
       router.refresh();
       setLoading(false);

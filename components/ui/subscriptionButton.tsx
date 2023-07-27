@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 interface SubscriptionButtonProps {
   isPro: boolean;
@@ -20,7 +21,8 @@ const SubscriptionButton = ({ isPro }: SubscriptionButtonProps) => {
 
       window.location.href = response.data.url;
     } catch (error) {
-      console.log("Bulling error", error);
+      // console.log("Bulling error", error);
+      toast.error("something went wrong");
     } finally {
       router.refresh();
       setLoading(false);
