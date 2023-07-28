@@ -1,19 +1,21 @@
-import { auth } from "@clerk/nextjs";
+// import { auth } from "@clerk/nextjs";
 
 import prismaDB from "@/lib/prismaDB";
 import { MAX_FREE_COUNTS } from "@/constants";
+import { getServerSession } from "next-auth";
 
 // increase api limitcount as user interracts with the various endpoints
 export const increaseAPILimit = async () => {
-  const { userId } = auth();
+  // const { userId } = auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session) {
     return;
   }
 
   const userApiLimit = await prismaDB.userApiLimit.findUnique({
     where: {
-      userId,
+      userId: "",
     },
   });
 
@@ -21,7 +23,7 @@ export const increaseAPILimit = async () => {
     // update its count
     await prismaDB.userApiLimit.update({
       where: {
-        userId,
+        userId: "",
       },
       data: {
         count: userApiLimit.count + 1,
@@ -31,7 +33,7 @@ export const increaseAPILimit = async () => {
     // create new record
     await prismaDB.userApiLimit.create({
       data: {
-        userId,
+        userId: "",
         count: 1,
       },
     });
@@ -40,15 +42,16 @@ export const increaseAPILimit = async () => {
 
 // check if user has reached the limit of free usage
 export const checkAPILimit = async () => {
-  const { userId } = auth();
+  // const { userId } = auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session) {
     return;
   }
 
   const userApiLimit = await prismaDB.userApiLimit.findUnique({
     where: {
-      userId,
+      userId: "1",
     },
   });
 
@@ -62,16 +65,17 @@ export const checkAPILimit = async () => {
 };
 
 export const getApiLimitCount = async () => {
-  const { userId } = auth();
+  // const { userId } = auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session) {
     return 0;
   }
 
   // fetch user api limit
   const userApiLimit = await prismaDB.userApiLimit.findUnique({
     where: {
-      userId,
+      userId: "1",
     },
   });
 

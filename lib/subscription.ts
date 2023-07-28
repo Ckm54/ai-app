@@ -1,22 +1,24 @@
 // checks if current user has a subscription or not
 // also check if subscription has expired or not
-import { auth } from "@clerk/nextjs";
+// import { auth } from "@clerk/nextjs";
 
+import { getServerSession } from "next-auth";
 import prismaDB from "./prismaDB";
 
 const DAY_IN_MILLISECONDS = 86_400_000;
 
 export const checkSubscription = async () => {
-  const { userId } = auth();
+  // const { userId } = auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session) {
     return false;
   }
 
   // get a user subscription
   const userSubscription = await prismaDB.userSubscription.findUnique({
     where: {
-      userId,
+      userId: "1",
     },
     select: {
       stripeSubscriptionId: true,
