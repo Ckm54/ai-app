@@ -1,26 +1,30 @@
 // handle stripe payments
-import { auth, currentUser } from "@clerk/nextjs";
+// import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import prismaDB from "@/lib/prismaDB";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 const settingsUrl = absoluteUrl("/settings");
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
   try {
-    const { userId } = auth();
-    const user = await currentUser();
+    // const { userId } = auth();
+    // const user = await currentUser();
 
-    if (!userId || !user) {
+    if (!session || !session.user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // try finding current user's subscription
+    // TODO::: FIX USERID
     const userSubscription = await prismaDB.userSubscription.findUnique({
       where: {
-        userId,
+        userId: "1",
       },
     });
 
@@ -42,7 +46,8 @@ export async function GET() {
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
-      customer_email: user.emailAddresses[0].emailAddress,
+      // customer_email: user.emailAddresses[0].emailAddress,
+      customer_email: session.user.email!,
       line_items: [
         {
           price_data: {
@@ -60,7 +65,7 @@ export async function GET() {
         },
       ],
       metadata: {
-        userId,
+        userId: "1",
       },
     });
 

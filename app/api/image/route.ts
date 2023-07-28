@@ -1,9 +1,11 @@
-import { auth } from "@clerk/nextjs";
+// import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
 
 import { increaseAPILimit, checkAPILimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,14 +13,15 @@ const configuration = new Configuration({
 
 const openAI = new OpenAIApi(configuration);
 
-export async function POST(req: Request) {
+export async function POST(req: Request, res: Response) {
+  const session = await getServerSession(authOptions);
   try {
-    const { userId } = auth();
+    // const { userId } = auth();
 
     const body = await req.json();
     const { prompt, amount = 1, resolution = "512x512" } = body;
 
-    if (!userId) {
+    if (!session) {
       return new NextResponse("Unauthorized ", { status: 401 });
     }
 
