@@ -1,6 +1,7 @@
 import MobileSidebar from "@/components/Navigation/MobileSidebar";
 import { getApiLimitCount } from "@/lib/apiLimit";
 import { getServerSession } from "next-auth";
+import UserMenu from "@/components/shared/UserMenu";
 // import { UserButton } from "@clerk/nextjs";
 
 interface NavbarProps {
@@ -24,6 +25,7 @@ const Navbar = async ({ userName, isPro }: NavbarProps) => {
       <div className="flex w-full justify-end">
         {/* <UserButton afterSignOutUrl="/" /> */}
         {session?.user?.email}
+        <UserMenu />
       </div>
     </div>
   );

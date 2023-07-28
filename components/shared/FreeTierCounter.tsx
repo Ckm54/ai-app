@@ -7,6 +7,7 @@ import { MAX_FREE_COUNTS } from "@/constants";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useProModal } from "@/hooks/useProModal";
+import UserMenu from "@/components/shared/UserMenu";
 // import { UserButton } from "@clerk/nextjs";
 // import { User } from "@clerk/nextjs/dist/types/server";
 
@@ -64,6 +65,7 @@ const FreeTierCounter = ({
       <div className="flex space-x-2 mt-2 py-1">
         {/* <UserButton afterSignOutUrl="/" /> */}
         <p>{userName}</p>
+        <UserMenu />
       </div>
     </div>
   );
