@@ -4,10 +4,16 @@ import { Card } from "@/components/ui/card";
 import { tools } from "@/constants";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const router = useRouter();
+
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  console.log(user);
 
   return (
     <div>
