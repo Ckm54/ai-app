@@ -3,10 +3,11 @@ import React from "react";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
+import { signIn, useSession } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const font = Montserrat({
   weight: "600",
@@ -14,7 +15,8 @@ const font = Montserrat({
 });
 
 const LandingPageNavbar = () => {
-  const { isSignedIn } = useAuth();
+  const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <nav className="p-4 bg-transparent flex items-center justify-between">
@@ -28,11 +30,15 @@ const LandingPageNavbar = () => {
       </Link>
 
       <div className="flex items-center gap-x-3">
-        <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
-          <Button variant={"outline"} className="rounded-full">
-            Get started
-          </Button>
-        </Link>
+        {/* <Link href={session ? "/dashboard" : "/sign-up"}> */}
+        <Button
+          variant={"outline"}
+          className="rounded-full"
+          onClick={() => (session ? router.push("/dashboard") : signIn())}
+        >
+          Get started
+        </Button>
+        {/* </Link> */}
       </div>
     </nav>
   );

@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Sidebar from "@/components/Navigation/Sidebar";
-import { User } from "@clerk/nextjs/dist/types/server";
+// import { User } from "@clerk/nextjs/dist/types/server";
 
 interface MobileSidebarProps {
   apiLimitCount: number;

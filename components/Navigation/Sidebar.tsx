@@ -15,7 +15,7 @@ import {
   VideoIcon,
 } from "lucide-react";
 import FreeTierCounter from "@/components/shared/FreeTierCounter";
-import { User } from "@clerk/nextjs/dist/types/server";
+// import { User } from "@clerk/nextjs/dist/types/server";
 import { checkSubscription } from "@/lib/subscription";
 
 interface SidebarProps {

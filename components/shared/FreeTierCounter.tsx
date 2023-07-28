@@ -7,8 +7,8 @@ import { MAX_FREE_COUNTS } from "@/constants";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useProModal } from "@/hooks/useProModal";
-import { UserButton } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/dist/types/server";
+// import { UserButton } from "@clerk/nextjs";
+// import { User } from "@clerk/nextjs/dist/types/server";
 
 interface FreeTierCounterProps {
   apiLimitCount: number;
@@ -62,7 +62,7 @@ const FreeTierCounter = ({
         </Card>
       )}
       <div className="flex space-x-2 mt-2 py-1">
-        <UserButton afterSignOutUrl="/" />
+        {/* <UserButton afterSignOutUrl="/" /> */}
         <p>{userName}</p>
       </div>
     </div>
