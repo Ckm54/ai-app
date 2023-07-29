@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navigation/Navbar";
 import Sidebar from "@/components/Navigation/Sidebar";
 import { getApiLimitCount } from "@/lib/apiLimit";
+import { authOptions } from "@/lib/authOptions";
 import { checkSubscription } from "@/lib/subscription";
 import { getServerSession } from "next-auth";
 // import { currentUser } from "@clerk/nextjs";
@@ -10,7 +11,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   // get user api limit count
   const apiLimitCount = await getApiLimitCount();
   // const user = await currentUser();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const isPro = await checkSubscription();
 
   // const userName = user?.firstName + " " + user?.lastName;
