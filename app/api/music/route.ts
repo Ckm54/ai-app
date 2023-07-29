@@ -5,7 +5,7 @@ import Replicate from "replicate";
 import { increaseAPILimit, checkAPILimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]";
+import { authOptions } from "@/lib/authOptions";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN || "",

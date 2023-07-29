@@ -5,7 +5,7 @@ import { Configuration, OpenAIApi } from "openai";
 import { increaseAPILimit, checkAPILimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]";
+import { authOptions } from "@/lib/authOptions";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
