@@ -1,10 +1,11 @@
 // import { useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
 
 export const UserAvatar = async () => {
   // const { user } = useUser();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <Avatar className="h-8 w-8">

@@ -8,6 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 
 const font = Montserrat({
   weight: "600",
@@ -15,7 +16,7 @@ const font = Montserrat({
 });
 
 const LandingPageNavbar = () => {
-  const { data: session } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   return (
@@ -34,9 +35,15 @@ const LandingPageNavbar = () => {
         <Button
           variant={"outline"}
           className="rounded-full"
-          onClick={() => (session ? router.push("/dashboard") : signIn())}
+          onClick={() =>
+            status === "authenticated" ? router.push("/dashboard") : signIn()
+          }
         >
-          Get started
+          {status === "loading" ? (
+            <Loader className="w-4 h-4 animate-spin" />
+          ) : (
+            "Get started"
+          )}
         </Button>
         {/* </Link> */}
       </div>
