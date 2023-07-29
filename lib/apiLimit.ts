@@ -3,11 +3,12 @@
 import prismaDB from "@/lib/prismaDB";
 import { MAX_FREE_COUNTS } from "@/constants";
 import { getServerSession } from "next-auth";
+import { authOptions } from "./authOptions";
 
 // increase api limitcount as user interracts with the various endpoints
 export const increaseAPILimit = async () => {
   // const { userId } = auth();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     return;
@@ -43,7 +44,7 @@ export const increaseAPILimit = async () => {
 // check if user has reached the limit of free usage
 export const checkAPILimit = async () => {
   // const { userId } = auth();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     return;
@@ -66,7 +67,7 @@ export const checkAPILimit = async () => {
 
 export const getApiLimitCount = async () => {
   // const { userId } = auth();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     return 0;

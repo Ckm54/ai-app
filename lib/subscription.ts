@@ -4,12 +4,13 @@
 
 import { getServerSession } from "next-auth";
 import prismaDB from "./prismaDB";
+import { authOptions } from "./authOptions";
 
 const DAY_IN_MILLISECONDS = 86_400_000;
 
 export const checkSubscription = async () => {
   // const { userId } = auth();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     return false;
