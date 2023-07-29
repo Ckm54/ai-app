@@ -11,12 +11,31 @@
 // export const config = {
 //   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 // };
+import { getToken } from "next-auth/jwt";
 import { withAuth } from "next-auth/middleware";
+import { NextRequest, NextResponse } from "next/server";
 
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
-  function middleware(req) {
-    console.log(req.nextauth.token);
+  async function middleware(req: NextRequest) {
+    const pathName = req.nextUrl.pathname;
+    const protectedPaths = ["/", "/dashboard"];
+    const isPathProtected = protectedPaths.some((path) => pathName === path);
+
+    const res = NextResponse.next();
+
+    if (isPathProtected) {
+      const token = await getToken({ req });
+
+      console.log({ token });
+
+      // if (!token) {
+      //   const url = new URL("auth/signin", req.url);
+      //   url.searchParams.set("callbackUrl", pathName);
+      //   return NextResponse.redirect(url);
+      // }
+    }
+    return res;
   },
   {
     callbacks: {
@@ -25,4 +44,4 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/admin"] };
+export const config = { matcher: ["/dashboard"] };
