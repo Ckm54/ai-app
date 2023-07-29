@@ -39,11 +39,7 @@ const LandingPageNavbar = () => {
             status === "authenticated" ? router.push("/dashboard") : signIn()
           }
         >
-          {status === "loading" ? (
-            <Loader className="w-4 h-4 animate-spin" />
-          ) : (
-            "Get started"
-          )}
+          Get started
         </Button>
         {/* </Link> */}
       </div>

@@ -1,32 +1,29 @@
 "use client";
-import React from "react";
 import OauthButton from "@/components/shared/OauthButton";
+import { signIn } from "next-auth/react";
+import React from "react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import { Button } from "../ui/button";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = React.useState(true);
 
   return (
-    <div className="flex flex-col items-start justify-center w-1/2 h-full">
+    <div className="flex flex-col items-start justify-center w-full px-8 md:px-20 lg:px-0 lg:w-1/2">
       <h1 className="text-4xl font-bold">
         {isLogin ? "Login to account" : "Create an account"}
       </h1>
-      <p className="text-muted-foreground py-2">
-        Enter credentials to {isLogin ? "login" : "signup"}
-      </p>
 
       <div className="w-full flex flex-col gap-y-4 my-5">
         <OauthButton
           imageSrc="/google.png"
           btnText="Continue with Google"
-          onClickCallback={() => {}}
+          onClickCallback={() => signIn("google")}
         />
         <OauthButton
           imageSrc="/github.png"
           btnText="Continue with Github"
-          onClickCallback={() => {}}
+          onClickCallback={() => signIn("github")}
         />
       </div>
 
@@ -35,6 +32,10 @@ const AuthForm = () => {
         <span className="text-muted-foreground flex-shrink mx-4">OR</span>
         <div className="w-20 border-t border-gray-400" />
       </div>
+
+      <p className="text-muted-foreground py-2">
+        Enter credentials to {isLogin ? "login" : "signup"}
+      </p>
 
       <div className="w-full">
         <div>

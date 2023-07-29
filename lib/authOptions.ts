@@ -51,6 +51,9 @@ export const authOptions: NextAuthOptions = {
       session.user.id = user.id;
       return session;
     },
+    redirect: async ({ url, baseUrl }) => {
+      return Promise.resolve(url);
+    },
   },
   pages: {
     signIn: "/auth/signin",

@@ -2,6 +2,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { Loader } from "lucide-react";
 
 interface OauthButtonProps {
   imageSrc: string;
@@ -14,6 +16,7 @@ const OauthButton = ({
   btnText,
   onClickCallback,
 }: OauthButtonProps) => {
+  const { status } = useSession({ required: true });
   return (
     <div>
       <Button
@@ -25,7 +28,8 @@ const OauthButton = ({
         <div className="w-6 h-6 relative ">
           <Image src={imageSrc} alt={btnText} fill />
         </div>
-        {btnText}
+        {btnText}{" "}
+        {status === "loading" && <Loader className="w-4 h-4 animate-spin" />}
       </Button>
     </div>
   );
