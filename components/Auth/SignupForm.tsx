@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signupFormSchema } from "./constants";
+import axios from "axios";
 
 interface SignupFormProps {
   toggleForm: () => void;
@@ -25,6 +26,7 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       username: "",
+      email: "",
       password: "",
       passwordConfirmation: "",
     },
@@ -35,6 +37,9 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
   const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     // todo: handle form submit
     console.log(values);
+    const response = await axios.post("/api/auth/signup", {
+      userInfo: values,
+    });
   };
 
   return (

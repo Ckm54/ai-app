@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prismaAdapter from "@/prisma/prisma";
+import prismaDB from "./prismaDB";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prismaAdapter),
@@ -47,11 +48,25 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // async signIn({ user, account, profile }) {
+    //   // check if email account exists
+    //   console.log({ user });
+    //   if (user.email) {
+    //     const existingAccount = await findExistingUserByEmail(user.email);
+
+    //     if (existingAccount) {
+    //       return false;
+    //     }
+    //   }
+    //   return true;
+    // },
     async session({ session, token, user }) {
+      // console.log({ session });
       session.user.id = user.id;
       return session;
     },
     redirect: async ({ url, baseUrl }) => {
+      // console.log({ baseUrl, url });
       return Promise.resolve(url);
     },
   },
@@ -59,3 +74,17 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
   },
 };
+
+// get an existing user account by email address
+async function findExistingUserByEmail(email: string) {
+  const user = await prismaDB.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (user?.email === email) {
+    return true;
+  }
+  return false;
+}

@@ -15,7 +15,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const isPro = await checkSubscription();
 
   // const userName = user?.firstName + " " + user?.lastName;
-  const userName = session?.user?.email ? session.user.email : "";
+  const userName = session?.user?.name ? session.user.name : "";
 
   return (
     <div className="h-full relative">

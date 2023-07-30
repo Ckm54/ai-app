@@ -11,7 +11,12 @@ export default function Page() {
         <div className="flex flex-col items-center justify-center">
           <Link href={"/"} className="flex gap-x-2 items-center lg:w-1/2 mb-4">
             <div className="w-12 h-12 relative bg-blue-200 rounded-md">
-              <Image src={"/logo.png"} alt="app logo" fill />
+              <Image
+                src={"/logo.png"}
+                alt="app logo"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
             </div>
             <h2>Synth</h2>
           </Link>

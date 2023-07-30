@@ -13,13 +13,13 @@ export const signupFormSchema = z
     email: z
       .string()
       .min(1, { message: "This field has to be filled." })
-      .email("This is not a valid email.")
-      .refine(async (e) => {
-        // TODO:::
-        // Where checkIfEmailIsValid makes a request to the backend
-        // to see if the email is valid.
-        // return await checkIfEmailIsValid(e);
-      }, "This email is not in our database"),
+      .email("This is not a valid email."),
+    // .refine(async (e) => {
+    //   // TODO:::
+    //   // Where checkIfEmailIsValid makes a request to the backend
+    //   // to see if the email is valid.
+    //   // return await checkIfEmailIsValid(e);
+    // }, "This email is not in our database")
     password: z.string().min(6, {
       message: "Password too short (Should be at least 6 characters long)",
     }),

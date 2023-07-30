@@ -1,12 +1,23 @@
 "use client";
 import OauthButton from "@/components/shared/OauthButton";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React from "react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = React.useState(true);
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+  const { data: session } = useSession();
+
+  const handleProviderSignin = async (provider: string) => {
+    setErrorMsg(null);
+    const result = await signIn(provider, { callbackUrl: "/dashboard" });
+
+    if (result?.error) {
+      setErrorMsg(result.error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-start justify-center w-full px-8 md:px-20 lg:px-0 lg:w-1/2">
@@ -15,15 +26,16 @@ const AuthForm = () => {
       </h1>
 
       <div className="w-full flex flex-col gap-y-4 my-5">
+        <div>{session?.error && <p>{session.error}</p>}</div>
         <OauthButton
           imageSrc="/google.png"
           btnText="Continue with Google"
-          onClickCallback={() => signIn("google")}
+          onClickCallback={() => handleProviderSignin("google")}
         />
         <OauthButton
           imageSrc="/github.png"
           btnText="Continue with Github"
-          onClickCallback={() => signIn("github")}
+          onClickCallback={() => handleProviderSignin("github")}
         />
       </div>
 
