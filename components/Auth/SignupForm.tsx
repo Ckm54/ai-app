@@ -21,7 +21,7 @@ interface SignupFormProps {
 }
 
 const SignupForm = ({ toggleForm }: SignupFormProps) => {
-  const [messages, setMessages] = React.useState([]);
+  const [error, setError] = React.useState<string | null>(null);
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -36,10 +36,20 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     // todo: handle form submit
-    console.log(values);
-    const response = await axios.post("/api/auth/signup", {
-      userInfo: values,
-    });
+    setError(null);
+    try {
+      const response = await axios.post("/api/auth/signup", {
+        userInfo: values,
+      });
+
+      form.reset();
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        setError(error.response.data);
+        return;
+      }
+      console.log("Error registering", error);
+    }
   };
 
   return (
@@ -123,6 +133,7 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
               </FormItem>
             )}
           />
+          {error && <p className="text-red-500 text-sm py-2">{error}</p>}
           <Button className="w-full my-2" disabled={isLoading}>
             Signup
           </Button>
