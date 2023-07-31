@@ -10,8 +10,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { userInfo } = body;
 
-    if (!userInfo.username) {
-      return new NextResponse("Username is required", { status: 401 });
+    if (!userInfo.name) {
+      return new NextResponse("Name is required", { status: 401 });
     }
 
     if (!userInfo.email) {
@@ -29,13 +29,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // check if user with this username exists
-    if (existingUser && existingUser.username === userInfo.username) {
-      return new NextResponse("A user with this username already exists", {
-        status: 400,
-      });
-    }
-
+    // check if user with this email exists
     if (existingUser) {
       return new NextResponse("Email already registered", { status: 400 });
     }
@@ -49,7 +43,7 @@ export async function POST(req: NextRequest) {
       data: {
         email: userInfo.email,
         password: hashedPassword,
-        username: userInfo.username,
+        name: userInfo.name,
       },
     });
 
