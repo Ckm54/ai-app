@@ -1,18 +1,17 @@
-// import { useUser } from "@clerk/nextjs";
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
 
-export const UserAvatar = async () => {
+export const UserAvatar = () => {
   // const { user } = useUser();
-  const session = await getServerSession(authOptions);
+  const { data: session } = useSession();
 
   return (
     <Avatar className="h-8 w-8">
       <AvatarImage src={session?.user?.image || ""} />
       <AvatarFallback>
-        {session?.user?.name?.charAt(0)}
-        {session?.user?.email?.charAt(0)}
+        {session?.user?.name?.charAt(0).toUpperCase() ??
+          session?.user?.email?.charAt(0).toUpperCase()}
       </AvatarFallback>
     </Avatar>
   );
