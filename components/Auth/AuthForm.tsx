@@ -8,14 +8,14 @@ import SignupForm from "./SignupForm";
 const AuthForm = () => {
   const [isLogin, setIsLogin] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
-  const { data: session } = useSession();
 
   const handleProviderSignin = async (provider: string) => {
     setErrorMsg(null);
-    const result = await signIn(provider, { callbackUrl: "/dashboard" });
-
-    if (result?.error) {
-      setErrorMsg(result.error);
+    try {
+      await signIn(provider, { callbackUrl: "/dashboard" });
+    } catch (error) {
+      // console.log("An error occured: ", error);
+      setErrorMsg("Something went wrong");
     }
   };
 
@@ -26,7 +26,7 @@ const AuthForm = () => {
       </h1>
 
       <div className="w-full flex flex-col gap-y-4 my-5">
-        <div>{session?.error && <p>{session.error}</p>}</div>
+        <div>{errorMsg && <p>{errorMsg}</p>}</div>
         <OauthButton
           imageSrc="/google.png"
           btnText="Continue with Google"
