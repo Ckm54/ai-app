@@ -15,17 +15,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { loginFormSchema } from "./constants";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface LoginFormProps {
   toggleForm: () => void;
 }
 
 const LoginForm = ({ toggleForm }: LoginFormProps) => {
-  const [messages, setMessages] = React.useState([]);
+  const router = useRouter();
+  const [error, setError] = React.useState(false);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -33,7 +36,17 @@ const LoginForm = ({ toggleForm }: LoginFormProps) => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values);
+    setError(false);
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    });
+    if (res?.error) {
+      setError(!!res.error);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -44,15 +57,18 @@ const LoginForm = ({ toggleForm }: LoginFormProps) => {
           className=" focus-within:shadow-sm"
         >
           <FormField
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem className="my-4">
-                <FormLabel className="font-normal text-sm">Username:</FormLabel>
+                <FormLabel className="font-normal text-sm">
+                  Email address:
+                </FormLabel>
                 <FormControl className="m-0 p-0">
                   <Input
                     className="p-4"
+                    type="email"
                     disabled={isLoading}
-                    placeholder="Username..."
+                    placeholder="User@mail.com..."
                     {...field}
                   />
                 </FormControl>
@@ -78,6 +94,11 @@ const LoginForm = ({ toggleForm }: LoginFormProps) => {
               </FormItem>
             )}
           />
+          {error && (
+            <p className="text-sm text-red-500 py-1">
+              Invalid username and / or password
+            </p>
+          )}
           <Button className="w-full my-2" disabled={isLoading}>
             Login
           </Button>

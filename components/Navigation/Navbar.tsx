@@ -23,9 +23,7 @@ const Navbar = async ({ userName, isPro }: NavbarProps) => {
         isPro={isPro}
       />
 
-      <div className="flex w-full justify-end">
-        {/* <UserButton afterSignOutUrl="/" /> */}
-        {session?.user?.email}
+      <div className="flex w-full justify-end ">
         <UserMenu />
       </div>
     </div>

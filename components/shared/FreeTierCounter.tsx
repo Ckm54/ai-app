@@ -63,8 +63,6 @@ const FreeTierCounter = ({
         </Card>
       )}
       <div className="flex space-x-2 mt-2 py-1">
-        {/* <UserButton afterSignOutUrl="/" /> */}
-        <p>{userName}</p>
         <UserMenu />
       </div>
     </div>

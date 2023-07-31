@@ -2,6 +2,8 @@ import type { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prismaAdapter from "@/prisma/prisma";
 import prismaDB from "./prismaDB";
@@ -17,13 +19,14 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
+    // RE-ENABLE CREDENTIALS PROVIDER
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: {
-          label: "Username:",
-          type: "text",
-          placeholder: "your_cool_username",
+        email: {
+          label: "Email address:",
+          type: "email",
+          placeholder: "your email address",
         },
         password: {
           label: "Password:",
@@ -32,37 +35,49 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        console.log({ credentials });
         // retrieve credentials from database to verify credentials
-        const user = { id: "21", username: "Collins", password: "xxxxxxx" };
+        if (!credentials?.email || !credentials.password) {
+          return null;
+        }
 
-        if (
-          credentials?.username === user.username &&
-          credentials?.password === user.password
-        ) {
+        try {
+          const user = await prismaDB.user.findUnique({
+            where: {
+              email: credentials.email,
+            },
+          });
+
+          if (!user || !user.password) {
+            return null;
+          }
+
+          // compare passwords
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
           return user;
-        } else {
+        } catch (error) {
+          console.log("An error occured", error);
           return null;
         }
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    // async signIn({ user, account, profile }) {
-    //   // check if email account exists
-    //   console.log({ user });
-    //   if (user.email) {
-    //     const existingAccount = await findExistingUserByEmail(user.email);
-
-    //     if (existingAccount) {
-    //       return false;
-    //     }
-    //   }
-    //   return true;
-    // },
+    async jwt({ token, user }) {
+      return token;
+    },
     async session({ session, token, user }) {
-      // console.log({ session });
-      session.user.id = user.id;
       return session;
     },
     redirect: async ({ url, baseUrl }) => {
@@ -70,6 +85,7 @@ export const authOptions: NextAuthOptions = {
       return Promise.resolve(url);
     },
   },
+  debug: process.env.NODE_ENV === "development",
   pages: {
     signIn: "/auth/signin",
   },

@@ -16,15 +16,18 @@ const UserMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
-          <AvatarImage
-            src={session?.user.image ? session.user.image : "/avatar.png"}
-            alt={session?.user.name ? session.user.name : "user avatar"}
-          />
-          <AvatarFallback>
-            {session?.user.name ? session?.user.name[0].toUpperCase() : "A"}
-          </AvatarFallback>
-        </Avatar>
+        <div className="flex items-center gap-x-2 justify-center px-4 py-2 rounded-md border w-max cursor-pointer">
+          <p>{session?.user.name}</p>
+          <Avatar>
+            <AvatarImage
+              src={session?.user.image ? session.user.image : "/avatar.png"}
+              alt={session?.user.name ? session.user.name : "user avatar"}
+            />
+            <AvatarFallback>
+              {session?.user.name ? session?.user.name[0].toUpperCase() : "A"}
+            </AvatarFallback>
+          </Avatar>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Account</DropdownMenuLabel>

@@ -1,8 +1,11 @@
-import React from "react";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+"use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,9 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { signupFormSchema } from "./constants";
 import axios from "axios";
+import { signupFormSchema } from "./constants";
 
 interface SignupFormProps {
   toggleForm: () => void;
@@ -25,7 +27,7 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       passwordConfirmation: "",
@@ -41,6 +43,10 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
       const response = await axios.post("/api/auth/signup", {
         userInfo: values,
       });
+
+      if (response.status === 200) {
+        toggleForm();
+      }
 
       form.reset();
     } catch (error: any) {
@@ -60,15 +66,17 @@ const SignupForm = ({ toggleForm }: SignupFormProps) => {
           className=" focus-within:shadow-sm"
         >
           <FormField
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem className="my-4">
-                <FormLabel className="font-normal text-sm">Username:</FormLabel>
+                <FormLabel className="font-normal text-sm">
+                  Your Name:
+                </FormLabel>
                 <FormControl className="m-0 p-0">
                   <Input
                     className="p-4"
                     disabled={isLoading}
-                    placeholder="Username..."
+                    placeholder="Jane Doe..."
                     {...field}
                   />
                 </FormControl>
