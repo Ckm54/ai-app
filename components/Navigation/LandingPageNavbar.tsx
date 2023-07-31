@@ -1,14 +1,12 @@
 "use client";
-import React from "react";
+import { signIn, useSession } from "next-auth/react";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Loader } from "lucide-react";
 
 const font = Montserrat({
   weight: "600",
@@ -16,7 +14,8 @@ const font = Montserrat({
 });
 
 const LandingPageNavbar = () => {
-  const { status } = useSession();
+  const { data, status } = useSession();
+  console.log(status, data);
   const router = useRouter();
 
   return (
@@ -36,7 +35,9 @@ const LandingPageNavbar = () => {
           variant={"outline"}
           className="rounded-full"
           onClick={() =>
-            status === "authenticated" ? router.push("/dashboard") : signIn()
+            status !== "loading" && status === "authenticated"
+              ? router.push("/dashboard")
+              : signIn()
           }
         >
           Get started

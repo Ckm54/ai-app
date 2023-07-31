@@ -5,7 +5,7 @@ import React from "react";
 import * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Code, Divide } from "lucide-react";
+import { Code } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import ReactMarkdown from "react-markdown";

@@ -14,14 +14,9 @@ import UserMenu from "@/components/shared/UserMenu";
 interface FreeTierCounterProps {
   apiLimitCount: number;
   isPro: boolean;
-  userName: string;
 }
 
-const FreeTierCounter = ({
-  apiLimitCount,
-  isPro,
-  userName,
-}: FreeTierCounterProps) => {
+const FreeTierCounter = ({ apiLimitCount, isPro }: FreeTierCounterProps) => {
   const [mounted, setMounted] = React.useState(false);
   const openModal = useProModal((state) => state.onOpen);
 

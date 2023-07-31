@@ -42,7 +42,9 @@ const LandingHero = () => {
           variant={"premium"}
           className="md:text-lg p-4 md:p-6 rounded-full font-semibold"
           onClick={() =>
-            status === "authenticated" ? router.push("/dashboard") : signIn()
+            status !== "loading" && status === "authenticated"
+              ? router.push("/dashboard")
+              : signIn()
           }
         >
           Start Generating For Free

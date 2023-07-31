@@ -1,8 +1,6 @@
 import MobileSidebar from "@/components/Navigation/MobileSidebar";
-import { getApiLimitCount } from "@/lib/apiLimit";
-import { getServerSession } from "next-auth";
 import UserMenu from "@/components/shared/UserMenu";
-import { authOptions } from "@/lib/authOptions";
+import { getApiLimitCount } from "@/lib/apiLimit";
 // import { UserButton } from "@clerk/nextjs";
 
 interface NavbarProps {
@@ -12,7 +10,6 @@ interface NavbarProps {
 
 const Navbar = async ({ userName, isPro }: NavbarProps) => {
   const apiLimitCount = await getApiLimitCount();
-  const session = await getServerSession(authOptions);
 
   return (
     <div className="flex items-center p-4">
