@@ -1,7 +1,10 @@
 import * as z from "zod";
 
 export const loginFormSchema = z.object({
-  username: z.string().min(1, { message: "Please enter username" }),
+  email: z
+    .string()
+    .min(1, { message: "Please enter username" })
+    .email("This is not a valid email."),
   password: z.string().min(6, {
     message: "Password too short (Should be at least 6 characters long)",
   }),
@@ -9,7 +12,7 @@ export const loginFormSchema = z.object({
 
 export const signupFormSchema = z
   .object({
-    username: z.string().min(1, { message: "Please enter username" }),
+    name: z.string().min(1, { message: "Please enter your name" }),
     email: z
       .string()
       .min(1, { message: "This field has to be filled." })
