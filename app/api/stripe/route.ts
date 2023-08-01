@@ -21,10 +21,10 @@ export async function GET() {
     }
 
     // try finding current user's subscription
-    // TODO::: FIX USERID
+    ///// TODO::: FIX USERID
     const userSubscription = await prismaDB.userSubscription.findUnique({
       where: {
-        userId: "1",
+        userId: session.user.id,
       },
     });
 
@@ -65,7 +65,7 @@ export async function GET() {
         },
       ],
       metadata: {
-        userId: "1",
+        userId: session.user.id,
       },
     });
 
