@@ -19,7 +19,7 @@ export const checkSubscription = async () => {
   // get a user subscription
   const userSubscription = await prismaDB.userSubscription.findUnique({
     where: {
-      userId: "1",
+      userId: session.user.id,
     },
     select: {
       stripeSubscriptionId: true,

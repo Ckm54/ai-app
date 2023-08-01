@@ -9,6 +9,7 @@ import { authOptions } from "./authOptions";
 export const increaseAPILimit = async () => {
   // const { userId } = auth();
   const session = await getServerSession(authOptions);
+  console.log({ session });
 
   if (!session) {
     return;
@@ -16,7 +17,7 @@ export const increaseAPILimit = async () => {
 
   const userApiLimit = await prismaDB.userApiLimit.findUnique({
     where: {
-      userId: "",
+      userId: session.user.id,
     },
   });
 
@@ -24,7 +25,7 @@ export const increaseAPILimit = async () => {
     // update its count
     await prismaDB.userApiLimit.update({
       where: {
-        userId: "",
+        userId: session.user.id,
       },
       data: {
         count: userApiLimit.count + 1,
@@ -34,7 +35,7 @@ export const increaseAPILimit = async () => {
     // create new record
     await prismaDB.userApiLimit.create({
       data: {
-        userId: "",
+        userId: session.user.id,
         count: 1,
       },
     });
@@ -52,7 +53,7 @@ export const checkAPILimit = async () => {
 
   const userApiLimit = await prismaDB.userApiLimit.findUnique({
     where: {
-      userId: "1",
+      userId: session.user.id,
     },
   });
 
@@ -76,7 +77,7 @@ export const getApiLimitCount = async () => {
   // fetch user api limit
   const userApiLimit = await prismaDB.userApiLimit.findUnique({
     where: {
-      userId: "1",
+      userId: session.user.id,
     },
   });
 

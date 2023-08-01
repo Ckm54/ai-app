@@ -77,10 +77,12 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
+      if (token && token.sub) {
+        session.user.id = token.sub;
+      }
       return session;
     },
     redirect: async ({ url, baseUrl }) => {
-      // console.log({ baseUrl, url });
       return Promise.resolve(url);
     },
   },
