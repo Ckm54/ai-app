@@ -50,8 +50,8 @@ model User {
 model Conversation {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
   userId                  String      @db.ObjectId
-  prompt                  String
-  response                String
+  prompt                  Json[]
+  response                Json
 
   user                    User        @relation(fields: [userId], references: [id])
 }
@@ -61,7 +61,7 @@ model Music {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
   userId                  String      @db.ObjectId
   prompt                  String
-  response                String
+  responseData            Json
 
   user                    User        @relation(fields: [userId], references: [id])
 }
@@ -71,8 +71,9 @@ model Image {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
   userId                  String      @db.ObjectId
   prompt                  String
-  quality                 String
-  response                String[]
+  resolution              String
+  quantity                String
+  response                Json[]
 
   user                    User        @relation(fields: [userId], references: [id])
 }
@@ -82,7 +83,7 @@ model Video {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
   userId                  String      @db.ObjectId
   prompt                  String
-  response                String
+  responseData            Json
 
   user                    User        @relation(fields: [userId], references: [id])
 }
@@ -91,8 +92,8 @@ model Video {
 model CodeGen {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
   userId                  String      @db.ObjectId
-  prompt                  String
-  response                String
+  prompt                  Json[]
+  response                Json
 
   user                    User        @relation(fields: [userId], references: [id])
 }
