@@ -12,7 +12,7 @@ const AuthForm = () => {
   const handleProviderSignin = async (provider: string) => {
     setErrorMsg(null);
     try {
-      await signIn(provider, { callbackUrl: "/dashboard" });
+      await signIn(provider, { callbackUrl: "/synthai/dashboard" });
     } catch (error) {
       // console.log("An error occured: ", error);
       setErrorMsg("Something went wrong");

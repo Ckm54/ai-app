@@ -36,7 +36,7 @@ const LandingPageNavbar = () => {
           className="rounded-full"
           onClick={() =>
             status !== "loading" && status === "authenticated"
-              ? router.push("/dashboard")
+              ? router.push("/synthai/dashboard")
               : signIn()
           }
         >

@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "next-auth/middleware";
 
-export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/") {
-    return NextResponse.next();
+export default withAuth(
+  function middleware(req) {
+    console.log(req.nextauth.token);
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => {
+        console.log({ token });
+        return !!token;
+      },
+    },
   }
-  // return NextResponse.redirect(new URL("/auth/signin", request.url));
-}
+);
 
-export const config = { matcher: ["/:path*", "/dashboard"] };
+export const config = { matcher: ["/synthai/:path*", "/dashboard"] };

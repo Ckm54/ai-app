@@ -1,11 +1,9 @@
 "use client";
 // import { useAuth } from "@clerk/nextjs";
-import Link from "next/link";
-import React from "react";
-import TypewriterComponent from "typewriter-effect";
 import { Button } from "@/components/ui/button";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import TypewriterComponent from "typewriter-effect";
 
 const LandingHero = () => {
   // const { isSignedIn } = useAuth();
@@ -43,7 +41,7 @@ const LandingHero = () => {
           className="md:text-lg p-4 md:p-6 rounded-full font-semibold"
           onClick={() =>
             status !== "loading" && status === "authenticated"
-              ? router.push("/dashboard")
+              ? router.push("/synthai/dashboard")
               : signIn()
           }
         >
