@@ -14,6 +14,8 @@ import { Loader } from "lucide-react";
 
 const UserMenu = () => {
   const { data: session, status } = useSession();
+
+  console.log(session);
   return (
     <>
       {status === "loading" ? (

@@ -42,6 +42,8 @@ const LoginForm = ({ toggleForm }: LoginFormProps) => {
       email: values.email,
       password: values.password,
     });
+
+    console.log(res);
     if (res?.error) {
       setError(!!res.error);
     } else {
