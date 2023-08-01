@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth/next";
 import { increaseAPILimit, checkAPILimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
 import { authOptions } from "@/lib/authOptions";
+import prismaDB from "@/lib/prismaDB";
+import { Prisma } from "@prisma/client";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN || "",
@@ -44,6 +46,15 @@ export async function POST(req: Request) {
         },
       }
     );
+
+    // create record in database
+    await prismaDB.video.create({
+      data: {
+        prompt,
+        responseData: response as unknown as Prisma.InputJsonValue,
+        userId: session.user.id,
+      },
+    });
 
     if (!isPro) {
       // increase api limit count

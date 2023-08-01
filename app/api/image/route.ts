@@ -6,6 +6,8 @@ import { increaseAPILimit, checkAPILimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
+import prismaDB from "@/lib/prismaDB";
+import { Prisma } from "@prisma/client";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -54,6 +56,18 @@ export async function POST(req: Request, res: Response) {
       prompt,
       n: parseInt(amount, 10),
       size: resolution,
+    });
+
+    // create record in database
+    await prismaDB.image.create({
+      data: {
+        prompt,
+        quantity: amount,
+        resolution,
+        response: response.data
+          .data as unknown as Prisma.ImageCreateresponseInput,
+        userId: session.user.id,
+      },
     });
 
     if (!isPro) {

@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth/next";
 import { increaseAPILimit, checkAPILimit } from "@/lib/apiLimit";
 import { checkSubscription } from "@/lib/subscription";
 import { authOptions } from "@/lib/authOptions";
+import prismaDB from "@/lib/prismaDB";
+import { Prisma } from "@prisma/client";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,6 +17,8 @@ const openAI = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
+
+  console.log({ session });
   try {
     // const { userId } = auth();
 
@@ -45,6 +49,16 @@ export async function POST(req: Request) {
     const response = await openAI.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages,
+    });
+
+    // add this generation to database
+    await prismaDB.conversation.create({
+      data: {
+        userId: session.user.id,
+        prompt: messages,
+        response: response.data.choices[0]
+          .message as unknown as Prisma.InputJsonValue,
+      },
     });
 
     if (!isPro) {
