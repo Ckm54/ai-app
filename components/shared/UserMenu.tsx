@@ -11,11 +11,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const UserMenu = () => {
   const { data: session, status } = useSession();
-
-  console.log(session);
+  const router = useRouter();
   return (
     <>
       {status === "loading" ? (
@@ -44,7 +44,10 @@ const UserMenu = () => {
             <DropdownMenuLabel>Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => signOut({ callbackUrl: "http://localhost:3000/" })}
+              onClick={() => {
+                signOut({ callbackUrl: "http://localhost:3000/" });
+                router.replace("/");
+              }}
             >
               Logout
             </DropdownMenuItem>
