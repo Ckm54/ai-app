@@ -39,21 +39,31 @@ model User {
   image                   String?
   accounts                Account[]
   sessions                Session[]
-  conversations           Conversation[]
+  chats                   Chat[]
   music                   Music[]
   images                  Image[]
   videos                  Video[]
-  codeGenerations         CodeGen[]
+  codeGenerations         Code[]
+}
+
+
+model Chat {
+  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                  String      @db.ObjectId
+  conversationId          String?      @db.ObjectId
+  createdAt               Json
+
+  conversation            Conversation?   @relation("ChatToConversation")
+  user                    User        @relation(fields: [userId], references: [id])
 }
 
 // user conversations
 model Conversation {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId                  String      @db.ObjectId
-  prompt                  Json[]
-  response                Json
+  responses               Json[]
+  chatId                  String      @db.ObjectId @unique
 
-  user                    User        @relation(fields: [userId], references: [id])
+  chat                    Chat        @relation("ChatToConversation", fields: [chatId], references: [id])
 }
 
 // user music generations
@@ -88,14 +98,23 @@ model Video {
   user                    User        @relation(fields: [userId], references: [id])
 }
 
+// user code generations collection
+model Code {
+  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                  String      @db.ObjectId
+  codeGenId               String?      @db.ObjectId
+  createdAt               Json
+
+  codeGen                 CodeGen?   @relation("CodeToCodeGen")
+  user                    User        @relation(fields: [userId], references: [id])
+}
 // user code generations
 model CodeGen {
   id                      String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId                  String      @db.ObjectId
-  prompt                  Json[]
-  response                Json
+  codeId                  String      @db.ObjectId @unique
+  responses               Json[]
 
-  user                    User        @relation(fields: [userId], references: [id])
+  code                    Code        @relation("CodeToCodeGen", fields: [codeId], references: [id])
 }
 
 
