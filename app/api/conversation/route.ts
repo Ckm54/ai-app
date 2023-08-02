@@ -51,6 +51,7 @@ export async function POST(req: Request) {
       messages,
     });
 
+    const updatedMessages = [...messages, response.data.choices[0].message];
     // add this generation to database
     if (messages.length === 1) {
       const createdAt = new Date();
@@ -61,13 +62,12 @@ export async function POST(req: Request) {
           createdAt: createdAt as unknown as Prisma.InputJsonValue,
           conversation: {
             create: {
-              responses: [...messages, response.data.choices[0].message],
+              responses: updatedMessages,
             },
           },
         },
       });
     } else {
-      const updatedMessages = [...messages, response.data.choices[0].message];
       // find the latest or most recent chat created
       const mostRecentChat = await prismaDB.chat.findFirst({
         orderBy: {
