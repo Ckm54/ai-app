@@ -52,21 +52,56 @@ export async function POST(req: Request) {
     });
 
     // add this generation to database
-    await prismaDB.conversation.create({
-      data: {
-        userId: session.user.id,
-        prompt: messages,
-        response: response.data.choices[0]
-          .message as unknown as Prisma.InputJsonValue,
-      },
-    });
+    if (messages.length === 1) {
+      const createdAt = new Date();
+      // this is the begining of a new chat so create a new chat in database for this user
+      await prismaDB.chat.create({
+        data: {
+          userId: session.user.id,
+          createdAt: createdAt as unknown as Prisma.InputJsonValue,
+          conversation: {
+            create: {
+              responses: [...messages, response.data.choices[0].message],
+            },
+          },
+        },
+      });
+    } else {
+      const updatedMessages = [...messages, response.data.choices[0].message];
+      // find the latest or most recent chat created
+      const mostRecentChat = await prismaDB.chat.findFirst({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1, // retrieve only first document
+      });
+
+      if (mostRecentChat) {
+        // update the conversations of this chat
+        await prismaDB.conversation.update({
+          where: {
+            chatId: mostRecentChat.id,
+          },
+          data: {
+            responses: updatedMessages,
+          },
+        });
+      } else {
+        return new NextResponse(
+          "Chat collection not created yet. Please create a new one first",
+          { status: 400 }
+        );
+      }
+    }
+
+    // create conversations within this chat
 
     if (!isPro) {
       // increase api limit count
       await increaseAPILimit();
     }
 
-    return NextResponse.json(response.data.choices[0].message);
+    return NextResponse.json(response.data.choices[0].message, { status: 200 });
   } catch (error) {
     console.log("CONVERSATION_POST_ERROR", error);
     return new NextResponse("Internal error", { status: 500 });

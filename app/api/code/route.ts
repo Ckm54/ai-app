@@ -56,13 +56,49 @@ export async function POST(req: Request) {
     });
 
     // save data to db
-    await prismaDB.codeGen.create({
-      data: {
-        userId: session.user.id,
-        prompt: messages,
-        response: response.data.choices[0] as unknown as Prisma.InputJsonValue,
-      },
-    });
+    if (messages.length === 1) {
+      const createdAt = new Date();
+      // This is a new code generation chat session so create new code collection in databse
+      await prismaDB.code.create({
+        data: {
+          userId: session.user.id,
+          createdAt: createdAt as unknown as Prisma.InputJsonValue,
+          codeGen: {
+            create: {
+              responses: [...messages, response.data.choices[0].message],
+            },
+          },
+        },
+      });
+    } else {
+      // make an update to an existing generation
+      const updatedCodeGen = [...messages, response.data.choices[0].message];
+      // find most recent code session created
+      const mostRecentCode = await prismaDB.code.findFirst({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+      });
+
+      // if there's a most recent creation
+      if (mostRecentCode) {
+        // update codegens here
+        await prismaDB.codeGen.update({
+          where: {
+            codeId: mostRecentCode.id,
+          },
+          data: {
+            responses: updatedCodeGen,
+          },
+        });
+      } else {
+        return new NextResponse(
+          "Code collection not created yet. Please create a new one first",
+          { status: 400 }
+        );
+      }
+    }
 
     if (!isPro) {
       // increase api limit count
