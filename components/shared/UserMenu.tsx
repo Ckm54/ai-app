@@ -45,7 +45,7 @@ const UserMenu = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                signOut({ callbackUrl: "http://localhost:3000/" });
+                signOut({ callbackUrl: "/" });
                 router.replace("/");
               }}
             >
