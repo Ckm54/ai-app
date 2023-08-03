@@ -67,32 +67,33 @@ export async function POST(req: Request) {
           },
         },
       });
-    } else {
-      // find the latest or most recent chat created
-      const mostRecentChat = await prismaDB.chat.findFirst({
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 1, // retrieve only first document
-      });
-
-      if (mostRecentChat) {
-        // update the conversations of this chat
-        await prismaDB.conversation.update({
-          where: {
-            chatId: mostRecentChat.id,
-          },
-          data: {
-            responses: updatedMessages,
-          },
-        });
-      } else {
-        return new NextResponse(
-          "Chat collection not created yet. Please create a new one first",
-          { status: 400 }
-        );
-      }
     }
+    // else {
+    //   // find the latest or most recent chat created
+    //   const mostRecentChat = await prismaDB.chat.findFirst({
+    //     orderBy: {
+    //       createdAt: "desc",
+    //     },
+    //     take: 1, // retrieve only first document
+    //   });
+
+    //   if (mostRecentChat) {
+    //     // update the conversations of this chat
+    //     await prismaDB.conversation.update({
+    //       where: {
+    //         chatId: mostRecentChat.id,
+    //       },
+    //       data: {
+    //         responses: updatedMessages,
+    //       },
+    //     });
+    //   } else {
+    //     return new NextResponse(
+    //       "Chat collection not created yet. Please create a new one first",
+    //       { status: 400 }
+    //     );
+    //   }
+    // }
 
     // create conversations within this chat
 

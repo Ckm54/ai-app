@@ -70,35 +70,36 @@ export async function POST(req: Request) {
           },
         },
       });
-    } else {
-      // make an update to an existing generation
-      const updatedCodeGen = [...messages, response.data.choices[0].message];
-      // find most recent code session created
-      const mostRecentCode = await prismaDB.code.findFirst({
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 1,
-      });
-
-      // if there's a most recent creation
-      if (mostRecentCode) {
-        // update codegens here
-        await prismaDB.codeGen.update({
-          where: {
-            codeId: mostRecentCode.id,
-          },
-          data: {
-            responses: updatedCodeGen,
-          },
-        });
-      } else {
-        return new NextResponse(
-          "Code collection not created yet. Please create a new one first",
-          { status: 400 }
-        );
-      }
     }
+    // else {
+    //   // make an update to an existing generation
+    //   const updatedCodeGen = [...messages, response.data.choices[0].message];
+    //   // find most recent code session created
+    //   const mostRecentCode = await prismaDB.code.findFirst({
+    //     orderBy: {
+    //       createdAt: "desc",
+    //     },
+    //     take: 1,
+    //   });
+
+    //   // if there's a most recent creation
+    //   if (mostRecentCode) {
+    //     // update codegens here
+    //     await prismaDB.codeGen.update({
+    //       where: {
+    //         codeId: mostRecentCode.id,
+    //       },
+    //       data: {
+    //         responses: updatedCodeGen,
+    //       },
+    //     });
+    //   } else {
+    //     return new NextResponse(
+    //       "Code collection not created yet. Please create a new one first",
+    //       { status: 400 }
+    //     );
+    //   }
+    // }
 
     if (!isPro) {
       // increase api limit count
