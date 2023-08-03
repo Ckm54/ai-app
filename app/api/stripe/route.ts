@@ -8,7 +8,7 @@ import { absoluteUrl } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
-const settingsUrl = absoluteUrl("/settings");
+const settingsUrl = absoluteUrl("/synthai/settings");
 
 export async function GET() {
   const session = await getServerSession(authOptions);
